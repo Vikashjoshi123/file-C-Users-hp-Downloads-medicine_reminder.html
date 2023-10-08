@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Reminder App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-KyZXEAg3QhqLMpG8r+JhgL05w7dpwFeib6DlVb2xR2E8j5zMK6+79IMjPxftFZYvcbz7XIh0p/+13zqWzCEZH6g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        #add-medicine-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="time"],
+        button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #medicine-list {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .medicine-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-details {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .contact-link {
+            color: #007bff;
+        }
+
+        .icon-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .icon {
+            font-size: 24px;
+            color: #007bff;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Medicine Reminder App</h1>
+    <div class="contact-details">
+        <p>Contact for more details:</p>
+        <p>Email: <a class="contact-link" href="mailto:vikashjo134@gmail.com">vikashjo134@gmail.com</a></p>
+        <p>Phone: <a class="contact-link" href="tel:7249795815">724-979-5815</a></p>
+    </div>
+    <div id="medicine-list"></div>
+    <div id="add-medicine-form">
+        <h2>Add Medicine</h2>
+        <input type="text" id="medicine-name" placeholder="Medicine Name">
+        <input type="time" id="medicine-time">
+        <button onclick="addMedicine()">Add</button>
+    </div>
+    <audio id="buzzer">
+        <source src="buzzer.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <div class="icon-container">
+        <a href="#"><i class="fas fa-home icon"></i></a>
+        <a href="#"><i class="fas fa-sign-in-alt icon"></i></a>
+    </div>
+    <script>
+        const medicineData = [];
+
+        function displayMedicineReminders() {
+            const medicineList = document.getElementById('medicine-list');
+            medicineList.innerHTML = '';
+
+            for (const medicine of medicineData) {
+                const medicineItem = document.createElement('div');
+                medicineItem.className = 'medicine-item';
+                medicineItem.textContent = `${medicine.name} - ${medicine.time}`;
+                medicineList.appendChild(medicineItem);
+            }
+        }
+
+        function addMedicine() {
+            const medicineName = document.getElementById('medicine-name').value;
+            const medicineTime = document.getElementById('medicine-time').value;
+
+            if (medicineName && medicineTime) {
+                medicineData.push({ name: medicineName, time: medicineTime });
+                displayMedicineReminders();
+                document.getElementById('medicine-name').value = '';
+                document.getElementById('medicine-time').value = '';
+
+                // Play the buzzer sound
+                const buzzer = document.getElementById('buzzer');
+                buzzer.play();
+            }
+        }
+
+        // Request notification permission on page load
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                }
+            });
+        }
+
+        displayMedicineReminders();
+    </script>
+</body>
+</html>
+
